@@ -1,2 +1,2 @@
-print(new_addon)
-fs_copy("./.hemtt/template/addons/other", "./addons/" .. new_addon)
+print("Addon Made")
+fs_copy("./.hemtt/template/addon", "./addons/" .. new_addon)

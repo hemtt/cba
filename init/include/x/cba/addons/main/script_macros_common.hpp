@@ -16,14 +16,14 @@
      An example is the path that is built from defines. Some available in this file, others in mods and addons.
 
  Follows  Standard:
-   Object variables: PREFIX_COMPONENT
-   Main-object variables: PREFIX_main
-   Paths: MAINPREFIX\PREFIX\SUBPREFIX\COMPONENT\SCRIPTNAME.sqf
+   Object variables: prefix_COMPONENT
+   Main-object variables: prefix_main
+   Paths: mainprefix\prefix\SUBprefix\COMPONENT\SCRIPTNAME.sqf
    e.g: x\six\addons\sys_menu\fDate.sqf
 
  Usage:
-   define PREFIX and COMPONENT, then include this file
-   (Note, you could have a main addon for your mod, define the PREFIX in a macros.hpp,
+   define prefix and COMPONENT, then include this file
+   (Note, you could have a main addon for your mod, define the prefix in a macros.hpp,
    and include this script_macros_common.hpp file.
    Then in your addons, add a component.hpp, define the COMPONENT,
    and include your mod's script_macros.hpp
@@ -39,12 +39,12 @@
    - Single/Multi player gamelogics? (Incase of MP, you would want only 1 gamelogic per component, which is pv'ed from server, etc)
  */
 
-#ifndef MAINPREFIX
-    #define MAINPREFIX x
+#ifndef mainprefix
+    #define mainprefix x
 #endif
 
-#ifndef SUBPREFIX
-    #define SUBPREFIX addons
+#ifndef SUBprefix
+    #define SUBprefix addons
 #endif
 
 #ifndef MAINLOGIC
@@ -63,8 +63,8 @@
     #define VERSION_CONFIG version = VERSION; versionStr = QUOTE(VERSION); versionAr[] = {VERSION_AR}
 #endif
 
-#define ADDON DOUBLES(PREFIX,COMPONENT)
-#define MAIN_ADDON DOUBLES(PREFIX,main)
+#define ADDON DOUBLES(prefix,COMPONENT)
+#define MAIN_ADDON DOUBLES(prefix,main)
 
 /* -------------------------------------------
 Group: Debugging
@@ -134,7 +134,7 @@ Author:
 #define DEBUG_MODE_MINIMAL
 #endif
 
-#define LOG_SYS_FORMAT(LEVEL,MESSAGE) format ['[%1] (%2) %3: %4', toUpper 'PREFIX', 'COMPONENT', LEVEL, MESSAGE]
+#define LOG_SYS_FORMAT(LEVEL,MESSAGE) format ['[%1] (%2) %3: %4', toUpper 'prefix', 'COMPONENT', LEVEL, MESSAGE]
 
 #ifdef DEBUG_SYNCHRONOUS
 #define LOG_SYS(LEVEL,MESSAGE) diag_log text LOG_SYS_FORMAT(LEVEL,MESSAGE)
@@ -297,7 +297,7 @@ Example:
 Author:
     commy2
 ------------------------------------------- */
-#define ERROR_MSG(MESSAGE) ['PREFIX', 'COMPONENT', nil, MESSAGE, __FILE__, __LINE__ + 1] call CBA_fnc_error
+#define ERROR_MSG(MESSAGE) ['prefix', 'COMPONENT', nil, MESSAGE, __FILE__, __LINE__ + 1] call CBA_fnc_error
 #define ERROR_MSG_1(MESSAGE,ARG1) ERROR_MSG(FORMAT_1(MESSAGE,ARG1))
 #define ERROR_MSG_2(MESSAGE,ARG1,ARG2) ERROR_MSG(FORMAT_2(MESSAGE,ARG1,ARG2))
 #define ERROR_MSG_3(MESSAGE,ARG1,ARG2,ARG3) ERROR_MSG(FORMAT_3(MESSAGE,ARG1,ARG2,ARG3))
@@ -326,7 +326,7 @@ Example:
 Author:
     Spooner
 ------------------------------------------- */
-#define ERROR_WITH_TITLE(TITLE,MESSAGE) ['PREFIX', 'COMPONENT', TITLE, MESSAGE, __FILE__, __LINE__ + 1] call CBA_fnc_error
+#define ERROR_WITH_TITLE(TITLE,MESSAGE) ['prefix', 'COMPONENT', TITLE, MESSAGE, __FILE__, __LINE__ + 1] call CBA_fnc_error
 #define ERROR_WITH_TITLE_1(TITLE,MESSAGE,ARG1) ERROR_WITH_TITLE(TITLE,FORMAT_1(MESSAGE,ARG1))
 #define ERROR_WITH_TITLE_2(TITLE,MESSAGE,ARG1,ARG2) ERROR_WITH_TITLE(TITLE,FORMAT_2(MESSAGE,ARG1,ARG2))
 #define ERROR_WITH_TITLE_3(TITLE,MESSAGE,ARG1,ARG2,ARG3) ERROR_WITH_TITLE(TITLE,FORMAT_3(MESSAGE,ARG1,ARG2,ARG3))
@@ -736,8 +736,8 @@ Author:
 #define ISNILS(VARIABLE,DEFAULT_VALUE) if (isNil #VARIABLE) then { ##VARIABLE = ##DEFAULT_VALUE }
 #define ISNILS2(var1,var2,var3,var4) ISNILS(TRIPLES(var1,var2,var3),var4)
 #define ISNILS3(var1,var2,var3) ISNILS(DOUBLES(var1,var2),var3)
-#define ISNIL(var1,var2) ISNILS2(PREFIX,COMPONENT,var1,var2)
-#define ISNILMAIN(var1,var2) ISNILS3(PREFIX,var1,var2)
+#define ISNIL(var1,var2) ISNILS2(prefix,COMPONENT,var1,var2)
+#define ISNILMAIN(var1,var2) ISNILS3(prefix,var1,var2)
 
 #define CREATELOGICS(var1,var2) ##var1##_##var2## = ([sideLogic] call CBA_fnc_getSharedGroup) createUnit ["LOGIC", [0, 0, 0], [], 0, "NONE"]
 #define CREATELOGICLOCALS(var1,var2) ##var1##_##var2## = "LOGIC" createVehicleLocal [0, 0, 0]
@@ -748,22 +748,22 @@ Author:
 #define GETVARMAINS(var1,var2) GETVARS(var1,MAINLOGIC,var2)
 
 #ifndef PATHTO_SYS
-    #define PATHTO_SYS(var1,var2,var3) \MAINPREFIX\##var1\SUBPREFIX\##var2\##var3.sqf
+    #define PATHTO_SYS(var1,var2,var3) \mainprefix\##var1\SUBprefix\##var2\##var3.sqf
 #endif
 #ifndef PATHTOF_SYS
-    #define PATHTOF_SYS(var1,var2,var3) \MAINPREFIX\##var1\SUBPREFIX\##var2\##var3
+    #define PATHTOF_SYS(var1,var2,var3) \mainprefix\##var1\SUBprefix\##var2\##var3
 #endif
 
 #ifndef PATHTOF2_SYS
-    #define PATHTOF2_SYS(var1,var2,var3) MAINPREFIX\##var1\SUBPREFIX\##var2\##var3
+    #define PATHTOF2_SYS(var1,var2,var3) mainprefix\##var1\SUBprefix\##var2\##var3
 #endif
 
-#define PATHTO_R(var1) PATHTOF2_SYS(PREFIX,COMPONENT_C,var1)
-#define PATHTO_T(var1) PATHTOF_SYS(PREFIX,COMPONENT_T,var1)
-#define PATHTO_M(var1) PATHTOF_SYS(PREFIX,COMPONENT_M,var1)
-#define PATHTO_S(var1) PATHTOF_SYS(PREFIX,COMPONENT_S,var1)
-#define PATHTO_C(var1) PATHTOF_SYS(PREFIX,COMPONENT_C,var1)
-#define PATHTO_F(var1) PATHTO_SYS(PREFIX,COMPONENT_F,var1)
+#define PATHTO_R(var1) PATHTOF2_SYS(prefix,COMPONENT_C,var1)
+#define PATHTO_T(var1) PATHTOF_SYS(prefix,COMPONENT_T,var1)
+#define PATHTO_M(var1) PATHTOF_SYS(prefix,COMPONENT_M,var1)
+#define PATHTO_S(var1) PATHTOF_SYS(prefix,COMPONENT_S,var1)
+#define PATHTO_C(var1) PATHTOF_SYS(prefix,COMPONENT_C,var1)
+#define PATHTO_F(var1) PATHTO_SYS(prefix,COMPONENT_F,var1)
 
 // Already quoted ""
 #define QPATHTO_R(var1) QUOTE(PATHTO_R(var1))
@@ -808,15 +808,15 @@ Author:
 
 // *************************************
 // User Functions
-#define CFGSETTINGS CFGSETTINGSS(PREFIX,COMPONENT)
-#define PATHTO(var1) PATHTO_SYS(PREFIX,COMPONENT_F,var1)
-#define PATHTOF(var1) PATHTOF_SYS(PREFIX,COMPONENT,var1)
-#define PATHTOEF(var1,var2) PATHTOF_SYS(PREFIX,var1,var2)
+#define CFGSETTINGS CFGSETTINGSS(prefix,COMPONENT)
+#define PATHTO(var1) PATHTO_SYS(prefix,COMPONENT_F,var1)
+#define PATHTOF(var1) PATHTOF_SYS(prefix,COMPONENT,var1)
+#define PATHTOEF(var1,var2) PATHTOF_SYS(prefix,var1,var2)
 #define QPATHTOF(var1) QUOTE(PATHTOF(var1))
 #define QPATHTOEF(var1,var2) QUOTE(PATHTOEF(var1,var2))
 
-#define COMPILE_FILE(var1) COMPILE_FILE_SYS(PREFIX,COMPONENT_F,var1)
-#define COMPILE_FILE_CFG(var1) COMPILE_FILE_CFG_SYS(PREFIX,COMPONENT_F,var1)
+#define COMPILE_FILE(var1) COMPILE_FILE_SYS(prefix,COMPONENT_F,var1)
+#define COMPILE_FILE_CFG(var1) COMPILE_FILE_CFG_SYS(prefix,COMPONENT_F,var1)
 #define COMPILE_FILE2(var1) COMPILE_FILE2_SYS('var1')
 #define COMPILE_FILE2_CFG(var1) COMPILE_FILE2_CFG_SYS('var1')
 
@@ -834,7 +834,7 @@ Author:
     }; \
 };
 
-#define VERSIONING VERSIONING_SYS(PREFIX)
+#define VERSIONING VERSIONING_SYS(prefix)
 
 /* -------------------------------------------
 Macro: GVAR()
@@ -853,7 +853,7 @@ Author:
     Sickboy
 ------------------------------------------- */
 #define GVAR(var1) DOUBLES(ADDON,var1)
-#define EGVAR(var1,var2) TRIPLES(PREFIX,var1,var2)
+#define EGVAR(var1,var2) TRIPLES(prefix,var1,var2)
 #define QGVAR(var1) QUOTE(GVAR(var1))
 #define QEGVAR(var1,var2) QUOTE(EGVAR(var1,var2))
 #define QQGVAR(var1) QUOTE(QGVAR(var1))
@@ -875,19 +875,19 @@ Example:
 Author:
     Sickboy
 ------------------------------------------- */
-#define GVARMAIN(var1) GVARMAINS(PREFIX,var1)
+#define GVARMAIN(var1) GVARMAINS(prefix,var1)
 #define QGVARMAIN(var1) QUOTE(GVARMAIN(var1))
 #define QQGVARMAIN(var1) QUOTE(QGVARMAIN(var1))
 // TODO: What's this?
-#define SETTINGS DOUBLES(PREFIX,settings)
-#define CREATELOGIC CREATELOGICS(PREFIX,COMPONENT)
-#define CREATELOGICGLOBAL CREATELOGICGLOBALS(PREFIX,COMPONENT)
-#define CREATELOGICGLOBALTEST CREATELOGICGLOBALTESTS(PREFIX,COMPONENT)
-#define CREATELOGICLOCAL CREATELOGICLOCALS(PREFIX,COMPONENT)
-#define CREATELOGICMAIN CREATELOGICS(PREFIX,MAINLOGIC)
-#define GETVAR(var1) GETVARS(PREFIX,COMPONENT,var1)
-#define SETVAR SETVARS(PREFIX,COMPONENT)
-#define SETVARMAIN SETVARMAINS(PREFIX)
+#define SETTINGS DOUBLES(prefix,settings)
+#define CREATELOGIC CREATELOGICS(prefix,COMPONENT)
+#define CREATELOGICGLOBAL CREATELOGICGLOBALS(prefix,COMPONENT)
+#define CREATELOGICGLOBALTEST CREATELOGICGLOBALTESTS(prefix,COMPONENT)
+#define CREATELOGICLOCAL CREATELOGICLOCALS(prefix,COMPONENT)
+#define CREATELOGICMAIN CREATELOGICS(prefix,MAINLOGIC)
+#define GETVAR(var1) GETVARS(prefix,COMPONENT,var1)
+#define SETVAR SETVARS(prefix,COMPONENT)
+#define SETVARMAIN SETVARMAINS(prefix)
 #define IFCOUNT(var1,var2,var3) if (count ##var1 > ##var2) then { ##var3 = ##var1 select ##var2 };
 
 /* -------------------------------------------
@@ -897,10 +897,10 @@ Description:
     Defines a function.
 
     Full file path:
-        '\MAINPREFIX\PREFIX\SUBPREFIX\COMPONENT\fnc_<FNC>.sqf'
+        '\mainprefix\prefix\SUBprefix\COMPONENT\fnc_<FNC>.sqf'
 
     Resulting function name:
-        'PREFIX_COMPONENT_<FNC>'
+        'prefix_COMPONENT_<FNC>'
 
     The PREP macro should be placed in a script run by a XEH preStart and XEH preInit event.
 
@@ -923,14 +923,14 @@ Examples:
 Author:
     dixon13
  ------------------------------------------- */
-//#define PREP(var1) PREP_SYS(PREFIX,COMPONENT_F,var1)
+//#define PREP(var1) PREP_SYS(prefix,COMPONENT_F,var1)
 
 #ifdef DISABLE_COMPILE_CACHE
-    #define PREP(var1) TRIPLES(ADDON,fnc,var1) = compile preProcessFileLineNumbers 'PATHTO_SYS(PREFIX,COMPONENT_F,DOUBLES(fnc,var1))'
-    #define PREPMAIN(var1) TRIPLES(PREFIX,fnc,var1) = compile preProcessFileLineNumbers 'PATHTO_SYS(PREFIX,COMPONENT_F,DOUBLES(fnc,var1))'
+    #define PREP(var1) TRIPLES(ADDON,fnc,var1) = compile preProcessFileLineNumbers 'PATHTO_SYS(prefix,COMPONENT_F,DOUBLES(fnc,var1))'
+    #define PREPMAIN(var1) TRIPLES(prefix,fnc,var1) = compile preProcessFileLineNumbers 'PATHTO_SYS(prefix,COMPONENT_F,DOUBLES(fnc,var1))'
 #else
-    #define PREP(var1) ['PATHTO_SYS(PREFIX,COMPONENT_F,DOUBLES(fnc,var1))', 'TRIPLES(ADDON,fnc,var1)'] call SLX_XEH_COMPILE_NEW
-    #define PREPMAIN(var1) ['PATHTO_SYS(PREFIX,COMPONENT_F,DOUBLES(fnc,var1))', 'TRIPLES(PREFIX,fnc,var1)'] call SLX_XEH_COMPILE_NEW
+    #define PREP(var1) ['PATHTO_SYS(prefix,COMPONENT_F,DOUBLES(fnc,var1))', 'TRIPLES(ADDON,fnc,var1)'] call SLX_XEH_COMPILE_NEW
+    #define PREPMAIN(var1) ['PATHTO_SYS(prefix,COMPONENT_F,DOUBLES(fnc,var1))', 'TRIPLES(prefix,fnc,var1)'] call SLX_XEH_COMPILE_NEW
 #endif
 
 /* -------------------------------------------
@@ -940,7 +940,7 @@ Description:
     Defines a function inside CfgFunctions.
 
     Full file path in addons:
-        '\MAINPREFIX\PREFIX\SUBPREFIX\COMPONENT\fnc_<FNC>.sqf'
+        '\mainprefix\prefix\SUBprefix\COMPONENT\fnc_<FNC>.sqf'
     Define 'RECOMPILE' to enable recompiling.
     Define 'SKIP_FUNCTION_HEADER' to skip adding function header.
 
@@ -983,8 +983,8 @@ Author:
 }
 
 #define FUNC(var1) TRIPLES(ADDON,fnc,var1)
-#define FUNCMAIN(var1) TRIPLES(PREFIX,fnc,var1)
-#define FUNC_INNER(var1,var2) TRIPLES(DOUBLES(PREFIX,var1),fnc,var2)
+#define FUNCMAIN(var1) TRIPLES(prefix,fnc,var1)
+#define FUNC_INNER(var1,var2) TRIPLES(DOUBLES(prefix,var1),fnc,var2)
 #define EFUNC(var1,var2) FUNC_INNER(var1,var2)
 #define QFUNC(var1) QUOTE(FUNC(var1))
 #define QFUNCMAIN(var1) QUOTE(FUNCMAIN(var1))
@@ -1126,7 +1126,7 @@ Author:
 
 /* -------------------------------------------
 Macro: SCRIPT()
-    Sets name of script (relies on PREFIX and COMPONENT values being #defined).
+    Sets name of script (relies on prefix and COMPONENT values being #defined).
     Define 'SKIP_SCRIPT_NAME' to skip adding scriptName.
 
 Parameters:
@@ -1141,7 +1141,7 @@ Author:
     Spooner
 ------------------------------------------- */
 #ifndef SKIP_SCRIPT_NAME
-    #define SCRIPT(NAME) scriptName 'PREFIX\COMPONENT\NAME'
+    #define SCRIPT(NAME) scriptName 'prefix\COMPONENT\NAME'
 #else
     #define SCRIPT(NAME) /* nope */
 #endif
@@ -1236,12 +1236,12 @@ Author:
 #ifndef STRING_MACROS_GUARD
 #define STRING_MACROS_GUARD
     #define LSTRING(var1) QUOTE(TRIPLES(STR,ADDON,var1))
-    #define ELSTRING(var1,var2) QUOTE(TRIPLES(STR,DOUBLES(PREFIX,var1),var2))
+    #define ELSTRING(var1,var2) QUOTE(TRIPLES(STR,DOUBLES(prefix,var1),var2))
     #define CSTRING(var1) QUOTE(TRIPLES($STR,ADDON,var1))
-    #define ECSTRING(var1,var2) QUOTE(TRIPLES($STR,DOUBLES(PREFIX,var1),var2))
+    #define ECSTRING(var1,var2) QUOTE(TRIPLES($STR,DOUBLES(prefix,var1),var2))
 
     #define LLSTRING(var1) localize QUOTE(TRIPLES(STR,ADDON,var1))
-    #define LELSTRING(var1,var2) localize QUOTE(TRIPLES(STR,DOUBLES(PREFIX,var1),var2))
+    #define LELSTRING(var1,var2) localize QUOTE(TRIPLES(STR,DOUBLES(prefix,var1),var2))
 #endif
 
 
@@ -1608,8 +1608,8 @@ Group: Managing Deprecation
 Macro: DEPRECATE_SYS()
     Allow deprecation of a function that has been renamed.
 
-    Replaces an old OLD_FUNCTION (which will have PREFIX_ prepended) with a NEW_FUNCTION
-    (PREFIX_ prepended) with the intention that the old function will be disabled in the future.
+    Replaces an old OLD_FUNCTION (which will have prefix_ prepended) with a NEW_FUNCTION
+    (prefix_ prepended) with the intention that the old function will be disabled in the future.
 
     Shows a warning in RPT each time the deprecated function is used, but runs the new function.
 
@@ -1636,14 +1636,14 @@ Author:
 Macro: DEPRECATE()
     Allow deprecation of a function, in the current component, that has been renamed.
 
-    Replaces an OLD_FUNCTION (which will have PREFIX_ prepended) with a NEW_FUNCTION
-    (PREFIX_ prepended) with the intention that the old function will be disabled in the future.
+    Replaces an OLD_FUNCTION (which will have prefix_ prepended) with a NEW_FUNCTION
+    (prefix_ prepended) with the intention that the old function will be disabled in the future.
 
     Shows a warning in RPT each time the deprecated function is used, but runs the new function.
 
 Parameters:
-    OLD_FUNCTION - Name of old function, assuming PREFIX [Identifier for function that does not exist any more]
-    NEW_FUNCTION - Name of new function, assuming PREFIX [Function]
+    OLD_FUNCTION - Name of old function, assuming prefix [Identifier for function that does not exist any more]
+    NEW_FUNCTION - Name of new function, assuming prefix [Function]
 
 Example:
     (begin example)
@@ -1655,7 +1655,7 @@ Author:
     Sickboy
 ------------------------------------------- */
 #define DEPRECATE(OLD_FUNCTION,NEW_FUNCTION) \
-    DEPRECATE_SYS(DOUBLES(PREFIX,OLD_FUNCTION),DOUBLES(PREFIX,NEW_FUNCTION))
+    DEPRECATE_SYS(DOUBLES(prefix,OLD_FUNCTION),DOUBLES(prefix,NEW_FUNCTION))
 
 /* -------------------------------------------
 Macro: OBSOLETE_SYS()
@@ -1689,14 +1689,14 @@ Author:
 Macro: OBSOLETE()
     Replace a function, in the current component, that has become obsolete.
 
-    Replace an obsolete OLD_FUNCTION (which will have PREFIX_ prepended) with a simple
+    Replace an obsolete OLD_FUNCTION (which will have prefix_ prepended) with a simple
     COMMAND_CODE, with the intention that anyone using the function should replace it with the simple
     command.
 
     Shows a warning in RPT each time the deprecated function is used.
 
 Parameters:
-    OLD_FUNCTION - Name of old function, assuming PREFIX [Identifier for function that does not exist any more]
+    OLD_FUNCTION - Name of old function, assuming prefix [Identifier for function that does not exist any more]
     COMMAND_CODE - Code to replace the old function [Function]
 
 Example:
@@ -1709,7 +1709,7 @@ Author:
     Spooner
 ------------------------------------------- */
 #define OBSOLETE(OLD_FUNCTION,COMMAND_CODE) \
-    OBSOLETE_SYS(DOUBLES(PREFIX,OLD_FUNCTION),COMMAND_CODE)
+    OBSOLETE_SYS(DOUBLES(prefix,OLD_FUNCTION),COMMAND_CODE)
 
 #define BWC_CONFIG(NAME) class NAME { \
         units[] = {}; \

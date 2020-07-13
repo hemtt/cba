@@ -1,5 +1,5 @@
-#define MAINPREFIX {{MAINPREFIX}}
-#define PREFIX {{PREFIX}}
+#define mainprefix {{mainprefix}}
+#define prefix {{prefix}}
 
 #include "script_version.hpp"
 
